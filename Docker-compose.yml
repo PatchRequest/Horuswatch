@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+    web:
+        build: . 
+        networks: 
+          adnet:
+            ipv4_address: 192.168.178.5 
+        ports:
+            - "8000:8000"
+    syncer:
+        image: postgres
+    Cracker:
+    
+      image: dizcza/docker-hashcat
+      command: /hashcat -m 2500 -a 0 -w 3 -O -o /root/hashcat.txt /root/hashcat.hccap /root/hashcat.txt
+      networks:
+        adnet:
+          ipv4_address: 192.168.178.10
+        
+
+
+
+networks:
+    adnet:
+        driver: bridge
