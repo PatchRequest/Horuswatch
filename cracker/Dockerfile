@@ -19,6 +19,6 @@ RUN pip3 install -r /root/app/requirements.txt
 
 COPY . /root/app
 
-EXPOSE 8081
+EXPOSE 8080
 
 CMD [ "python3", "/root/app/server.py"  ]

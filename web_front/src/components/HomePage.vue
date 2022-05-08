@@ -1,6 +1,6 @@
 <template>
     <div >
-      
+      Home!
     </div>
 
 
@@ -10,6 +10,6 @@
 
 <script>
 export default {
-    name: 'CreatePage'
+    name: 'HomePage'
 }
 </script>

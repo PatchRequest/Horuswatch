@@ -1,5 +1,9 @@
 FROM node:lts-alpine
 
+
+ARG VUE_APP_SYNCER_REMOTE_URL
+ARG VUE_APP_CRACKER_REMOTE_URL
+
 # install simple http server for serving static content
 RUN npm install -g http-server
 
@@ -15,8 +19,13 @@ RUN npm install
 # copy project files and folders to the current working directory (i.e. 'app' folder)
 COPY . .
 
+RUN touch .env
+RUN echo "VUE_APP_SYNCER_REMOTE_URL=$VUE_APP_SYNCER_REMOTE_URL" >> .env
+RUN echo "VUE_APP_CRACKER_REMOTE_URL=$VUE_APP_CRACKER_REMOTE_URL" >> .env
+
 # build app for production with minification
 RUN npm run build
+
 
 EXPOSE 8080
 CMD [ "http-server", "dist" ]

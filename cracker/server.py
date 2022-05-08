@@ -1,16 +1,23 @@
 from socketserver import ThreadingMixIn
 from flask import Flask
 from flask import request
+from flask_cors import CORS
 import subprocess
+import os
 import re
 from threading import Thread
+
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/crack", methods=['POST'])
 def crackData():
+
     # check if lock file exists
-    if not subprocess.call(["ls", "/root/lock"]):
-        return "LOCKFILE EXISTS"
+    if subprocess.call('test -f /lock', shell=True) == 0:
+        return 'LOCK'
+   
+        
 
 
     data = request.get_json()
@@ -18,9 +25,13 @@ def crackData():
     
     # create testfile and save dump to it
     with open('/root/dump.ntds', 'w') as f:
-        f.write(dump)
+        for line in dump:
+            f.write(line+ " \n")
+
+
+
     # create lock file
-    with open('/root/lock', 'w') as f:
+    with open('/lock', 'w') as f:
         f.write('locked')
 
     
@@ -28,17 +39,20 @@ def crackData():
     onlyHashPath= "/root/dump.ntds"
     wordlistPath = "/root/app/pwlist.txt"
     rulefilePath = "/root/app/OneRuleToRuleThemAll.rule"
-    str = 'hashcat -m 1000 "' + onlyHashPath + '" "' + wordlistPath + '" -o ./badUser.txt --status --status-timer 10 --machine-readable -r "'+rulefilePath+'"  | tee output.txt'
-
-    thread = Thread(target=crackHashes, args=(hashcatPathFull,str))
+    #hashcat -m 1000 ../syncer/addump.ntds ./pwlist.txt -o ./badUser.txt --status --status-timer 10  --machine-readable  --username --show -r OneRuleToRuleThemAll.rule
+    str = 'hashcat -m 1000  --status --status-timer 1 --machine-readable --username --potfile-path myownteapot.potfile -r "'+ rulefilePath + '" "' + onlyHashPath + '" "' + wordlistPath + '"  | tee output.txt'
+    
+    thread = Thread(target=crackHashes, args=(hashcatPathFull,str,onlyHashPath))
     thread.start()
 
-    return "Startet"
+    return {"state":"Startet"}
 
 
-def crackHashes(hashcatPathFull,str):
+def crackHashes(hashcatPathFull,str,onlyHashPath):
     subprocess.run(str,cwd=hashcatPathFull,shell=True)
-    subprocess.call('rm /root/lock', shell=True)
+    str = "hashcat -m 1000 --username --potfile-path myownteapot.potfile --show -o /root/badUser.txt --outfile-format 2 " + onlyHashPath
+    subprocess.run(str,cwd=hashcatPathFull,shell=True)
+    subprocess.call('rm /lock', shell=True)
     
 
 @app.route("/result", methods=['GET'])
@@ -46,10 +60,19 @@ def getResult():
     # read file badUser.txt
     with open('/root/badUser.txt', 'r',encoding="utf-8") as f:
         badUser = f.read()
+    badUser = badUser.split('\n')
+    newBadUser = []
+    for user in badUser:
+        try:
+            split = user.split(':')
+            new = {"username":split[0],"password":split[1]}
+            newBadUser.append(new)
+        except:
+            pass
     # remove badUser.txt
     subprocess.call('rm /root/badUser.txt', shell=True)
     # return badUser
-    return badUser
+    return {"user":newBadUser}
  
 
 @app.route("/update", methods=['GET'])
@@ -90,4 +113,4 @@ def getUpdate():
         
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8081)
+    app.run(host="0.0.0.0", port=8080)
