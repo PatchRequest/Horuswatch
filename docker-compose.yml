@@ -3,10 +3,9 @@ version: '3'
 services:
     web:
       build: 
-        context: ./web_front
+        context: ./web_frontv2
         args:
-          - VUE_APP_SYNCER_REMOTE_URL=http://192.168.178.29:36144
-          - VUE_APP_CRACKER_REMOTE_URL=http://192.168.178.29:36145
+          - VUE_APP_BACKEND=http://192.168.178.29:8080
       container_name: adwebinterface
       ports:
         - "80:8080"

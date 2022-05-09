@@ -5,8 +5,12 @@
   </div>
   <div class="flex-none">
     <ul class="menu menu-horizontal p-0">
-      <li><a @click="this.$emit('clicked', 'create')">Create Job</a></li>
-      <li><a @click="this.$emit('clicked', 'status')">Current Status</a></li>
+      <li><a @click="this.$emit('clicked', 'statisticpage')">Statistics</a></li>
+      <li><a @click="this.$emit('clicked', 'createpage')">Create Job</a></li>
+      <li><a @click="this.$emit('clicked', 'statuspage')">Latest Status</a></li>
+      <li><a @click="this.$emit('clicked', 'addpage')">Custom Words</a></li>
+      
+      
     </ul>
   </div>
 </div>

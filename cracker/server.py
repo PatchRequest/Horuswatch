@@ -74,6 +74,17 @@ def getResult():
     # return badUser
     return {"user":newBadUser}
  
+@app.route("/addwords", methods=['POST'])
+def add_words():
+    data = request.get_json()
+    field_input = data['field_input']
+    # loop through every line of field_input and append it to pwlist.txt
+    with open('/root/app/pwlist.txt', 'a',encoding="utf-8") as f:
+        for line in field_input.split("\n"):
+            f.write(line+"\n")
+    return {"state":"Added"}
+
+
 
 @app.route("/update", methods=['GET'])
 def getUpdate():

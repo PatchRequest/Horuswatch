@@ -1,11 +1,11 @@
 <template>
-    <div >
-        <div>
-            <ul class="steps">
-                <li class="step" v-bind:class="{ 'step-primary': currenPhase > 0 }">Receive Hashes</li>
-                <li class="step" v-bind:class="{ 'step-primary': currenPhase > 1 }">Test Hashes</li>
-                <li class="step" v-bind:class="{ 'step-primary': currenPhase > 2 }">Analyze Findings</li>
-                <li class="step" v-bind:class="{ 'step-primary': currenPhase > 3 }">Display Results</li>
+    <div class="text-xl">
+        <div class="pb-10">
+            <ul class="steps w-full">
+                <li class="step" v-bind:class="{ 'step-primary': status > 0 }">Receive Hashes</li>
+                <li class="step" v-bind:class="{ 'step-primary': status > 2 }">Test Hashes</li>
+                <li class="step" v-bind:class="{ 'step-primary': status > 3 }">Analyze Findings</li>
+                <li class="step" v-bind:class="{ 'step-primary': status > 3 }">Display Results</li>
             </ul>
         </div>
         
@@ -15,6 +15,14 @@
             <div class="stat">
                 <div class="stat-title">Total Possible Hashes</div>
                 <div class="stat-value">{{ humanReadableNumber(total) }}</div>
+            </div>
+        
+        </div>
+        <div class="stats shadow">
+  
+            <div class="stat">
+                <div class="stat-title">Date</div>
+                <div class="stat-value">{{ date }}</div>
             </div>
         
         </div>
@@ -38,33 +46,38 @@
   
             <div class="stat">
                 <div class="stat-title">Percentage</div>
-                <div class="stat-value">{{percentage  }}%</div>
+                <div class="stat-value">{{ percentage }}%</div>
             </div>
         
         </div>
+        <div class="flex justify-center w-full pt-10">
         
-        <div>
-            <progress class="progress progress-secondary w-56" value="30" max="100"></progress>
+            <div class="w-3/4">
+                <progress class="progress progress-secondary h-16" :value="progress" :max="total"></progress>
+            </div>
         </div>
-        <div class="overflow-x-auto">
-            <table class="table w-full">
-                <!-- head -->
-                <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Password</th>
-                </tr>
-                </thead>
-                <tbody>
-                <!-- row 1 -->
-                <tr v-for="(user,i) in pwnduser" :key="i">
-                    <th>{{user.username}}</th>
-                    <td>{{user.password}}</td>
-                </tr>
-                <!-- row 2 -->
-                
-                </tbody>
-            </table>
+        <div class="flex justify-center w-full pt-10" >
+        
+            <div class="overflow-x-auto  w-3/4" v-if="status > 3">
+                <table class="table w-full">
+                    <!-- head -->
+                    <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Password</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- row 1 -->
+                    <tr v-for="(user,i) in pwnduser" :key="i">
+                        <th>{{user[1]}}</th>
+                        <td>{{user[3]}}</td>
+                    </tr>
+                    <!-- row 2 -->
+                    
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -75,35 +88,61 @@
 
 <script>
 
-
-
 export default {
     name: 'StatusPage',
-    props : ['phase'],
     data () {
         return {
-            total : 0,
-            progress : 0,
-            status : 0,
-            temp : 0,
-            speed : 0,
-            intervalID : 0,
-            percentage : 0,
-            currenPhase : 0, 
+            date : "01.01.2001",
+            total : 10,
+            progress : 7,
+            status : 5,
+            speed : 12,
+            currenPhase : 4, 
             pwnduser : []
         }
     },
-    watch: { 
-        phase: function(newVal, oldVal) { // watch it
-            this.currenPhase = newVal
-            // do something with newVal, oldVal
-            if (newVal == 2) {
-                this.intervalID =  setInterval(this.checkForUpdate, 2000)
-            }
-            console.log('Prop changed: ', newVal, ' | was: ', oldVal)
+    computed: {
+        percentage () {
+            return Math.floor(this.progress / this.total * 100)
         }
     },
+    mounted(){
+        this.axios.post(process.env.VUE_APP_BACKEND+"/result")
+        .then(response => {
+            
+            this.total = response.data.assessment[3]
+            this.progress = response.data.assessment[2]
+            this.speed = response.data.assessment[4]
+            this.status = response.data.assessment[5]
+            this.date = response.data.assessment[1]
+            if (this.status > 3) {
+                this.pwnduser = response.data.users
+                
+                
+            }
+        })
+        
+        setInterval(() => {
+            this.axios.post(process.env.VUE_APP_BACKEND+"/result")
+            .then(response => {
+                
+                this.total = response.data.assessment[3]
+                this.progress = response.data.assessment[2]
+                this.speed = response.data.assessment[4]
+                this.status = response.data.assessment[5]
+                this.date = response.data.assessment[1]
+                if (this.status > 3) {
+                    this.pwnduser = response.data.users
+                    
+                    
+                }
+            })
+
+        }, 3000);
+        
+    },
     methods : {
+        
         checkForUpdate(){
             fetch(process.env.VUE_APP_CRACKER_REMOTE_URL+"/update")
             .then(response => response.json())
