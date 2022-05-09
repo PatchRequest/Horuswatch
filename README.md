@@ -1,11 +1,7 @@
 # Heliades
-An Active Directory Passwort Assessment Solution
+An Active Directory Passwort Assessment Solution <br>
 It tests all passwords against billions of variations of know bad passwords
 
-## What is this Ad Necronomicon
-AD Necronomicon is a passwort assesment tool for your active directory. 
-It compares all user und computer passwords against a list of your choice
-You can provide your own local list or own backend or use the official backend
 
 ## Features
 - Easy to use UI
