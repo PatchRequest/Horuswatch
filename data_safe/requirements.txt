@@ -1,4 +1,4 @@
 Flask
 Flask_Cors==3.0.10
-impacket==0.10.0
+python-dotenv==0.20.0
 requests==2.27.1

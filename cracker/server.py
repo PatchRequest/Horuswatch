@@ -12,10 +12,10 @@ CORS(app)
 
 @app.route("/crack", methods=['POST'])
 def crackData():
-
+    
     # check if lock file exists
     if subprocess.call('test -f /lock', shell=True) == 0:
-        return 'LOCK'
+        return {"lock":"lock"}
    
         
 

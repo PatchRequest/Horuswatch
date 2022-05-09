@@ -2,16 +2,24 @@ version: '3'
 
 services:
     web:
-
-         
       build: 
         context: ./web_front
         args:
-          - VUE_APP_SYNCER_REMOTE_URL=http://127.0.0.1:36144
-          - VUE_APP_CRACKER_REMOTE_URL=http://127.0.0.1:36145
+          - VUE_APP_SYNCER_REMOTE_URL=http://192.168.178.29:36144
+          - VUE_APP_CRACKER_REMOTE_URL=http://192.168.178.29:36145
       container_name: adwebinterface
       ports:
         - "80:8080"
+    datasafe:
+      environment:
+        - SYNCER_REMOTE_URL=http://192.168.178.29:36144
+        - CRACKER_REMOTE_URL=http://192.168.178.29:36145
+      build: 
+        context: ./data_safe
+          
+      container_name: addatasafe
+      ports:
+        - "8080:8080"
     syncer:
       build: ./syncer
       container_name: adsyncer
