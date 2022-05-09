@@ -1,5 +1,0 @@
-sudo docker build -t patchcracker .
-sudo  docker run --gpus all -d patchcracker:latest
-
-sudo docker build -t patchsyncer .
-sudo  docker run  patchsyncer:latest 
