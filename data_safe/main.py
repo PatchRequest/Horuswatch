@@ -56,12 +56,12 @@ if not os.path.exists('database.db'):
 
 def getUpdatesUntilOver(date):
     status = "3"
-    CRACKER_REMOTE_URL=os.getenv("CRACKER_REMOTE_URL")
+    
      
     while status != "5":
         # make POST request to CRACKER_REMOTE_URL
         try:
-            r = requests.get(CRACKER_REMOTE_URL+"/update")
+            r = requests.get("http://adcracker/update")
             if r.status_code != 200:
                 raise Exception(r.text)
             # response to json
@@ -99,7 +99,7 @@ def getUpdatesUntilOver(date):
           
 
     # make post request to CRACKER_REMOTE_URL
-    r = requests.get(CRACKER_REMOTE_URL+"/result")
+    r = requests.get("http://adcracker/result")
     if r.status_code != 200:
         return {"Error":  r.text}
     # response to json
@@ -145,9 +145,9 @@ def create_assessment():
     
     print (dc_ip, target)
     # send POST request to SYNCER_REMOTE_URL
-    SYNCER_REMOTE_URL=os.getenv("SYNCER_REMOTE_URL")
     
-    r = requests.post(SYNCER_REMOTE_URL+"/steal", json={'dc_ip': dc_ip, 'target': target})
+    
+    r = requests.post("http://adsyncer/steal", json={'dc_ip': dc_ip, 'target': target})
     
     if r.status_code != 200:
         return {"Error":  r.text}
@@ -164,9 +164,9 @@ def create_assessment():
 
 
     # send POST request to CRACKER_REMOTE_URL
-    CRACKER_REMOTE_URL=os.getenv("CRACKER_REMOTE_URL")
+    
      
-    r = requests.post(CRACKER_REMOTE_URL+"/crack", json={'dump': data})
+    r = requests.post("http://adcracker/crack", json={'dump': data})
     if r.status_code != 200:
         return {"Error":  r.text}
     
@@ -234,8 +234,8 @@ def get_assessment():
 def add_words():
     data = request.get_json()
     field_input = data['field_input']
-    CRACKER_REMOTE_URL=os.getenv("CRACKER_REMOTE_URL")
-    r = requests.post(CRACKER_REMOTE_URL+"/addwords",json={'field_input': field_input})
+    
+    r = requests.post("http://adcracker/addwords",json={'field_input': field_input})
     if r.status_code != 200:
         raise Exception(r.text)
     

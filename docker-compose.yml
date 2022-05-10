@@ -10,25 +10,27 @@ services:
       ports:
         - "80:8080"
     datasafe:
-      environment:
-        - SYNCER_REMOTE_URL=http://192.168.178.29:36144
-        - CRACKER_REMOTE_URL=http://192.168.178.29:36145
       build: 
         context: ./data_safe
-          
+      networks:
+        - adnet
       container_name: addatasafe
       ports:
         - "8080:8080"
+
     syncer:
       build: ./syncer
+      networks:
+        - adnet
       container_name: adsyncer
-      ports:
-        - "36144:8080"
+
+
     cracker:
       build: ./cracker
+      networks:
+        - adnet
       container_name: adcracker
-      ports:
-        - "36145:8080"
+
       deploy:
         resources:
           reservations:
@@ -36,4 +38,6 @@ services:
               - driver: nvidia
                 count: 1
                 capabilities: [gpu]
-        
+networks:
+  adnet:
+    driver: bridge
