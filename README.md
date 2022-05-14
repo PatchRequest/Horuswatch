@@ -1,6 +1,3 @@
-
-![Horuswatch](https://i.ibb.co/G2LTskh/horuswatch.png)
-
 # Horuswatch
 An Active Directory Passwort Assessment Solution <br>
 Test every password of your Forests against billions of bad ones
