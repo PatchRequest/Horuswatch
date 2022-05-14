@@ -11,7 +11,8 @@ Test every password of your Forests against billions of bad ones
 
 
 ## Preperation
-Insert the workstation local ip at 
+Insert the workstation network ip into the docker-compose file
+
 ```bash
 ...
 build: 
