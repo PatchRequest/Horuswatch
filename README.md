@@ -1,7 +1,9 @@
+
+![Horuswatch](https://i.ibb.co/G2LTskh/horuswatch.png)
+
 # Horuswatch
 An Active Directory Passwort Assessment Solution <br>
-It tests all passwords against billions of variations of know bad passwords
-
+Test every password of your Forests against billions of bad ones
 
 ## Features
 - Easy to use UI
