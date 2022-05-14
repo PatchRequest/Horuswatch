@@ -1,4 +1,4 @@
-# Heliades
+# Horuswatch
 An Active Directory Passwort Assessment Solution <br>
 It tests all passwords against billions of variations of know bad passwords
 
