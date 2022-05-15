@@ -1,4 +1,7 @@
 <template>
+    <div class="md:flex md:justify-center text-3xl pb-10 pt-10">
+            Latest Status
+    </div>
     <div class="text-xl">
         <div class="pb-10">
             <ul class="steps w-full">
@@ -56,7 +59,11 @@
                 <progress class="progress progress-secondary h-16" :value="progress" :max="total"></progress>
             </div>
         </div>
-        <div class="flex justify-center w-full pt-10" >
+        <div class="flex justify-center w-full pt-10 text-xl"  v-if="status > 3">
+            <button class="btn btn-primary" @click="downloadData(this.id)"> Download Results</button>
+        </div>
+
+        <div class="flex justify-center w-full pt-3" >
         
             <div class="overflow-x-auto  w-3/4" v-if="status > 3">
                 <table class="table w-full">
@@ -87,17 +94,19 @@
 </template>
 
 <script>
+import { saveAs } from 'file-saver';
 
 export default {
     name: 'StatusPage',
     data () {
         return {
-            date : "01.01.2001",
-            total : 10,
-            progress : 7,
-            status : 5,
-            speed : 12,
-            currenPhase : 4, 
+            id: 0,
+            date : "loading...",
+            total : "loading...",
+            progress : "loading...",
+            status : 3,
+            speed : "loading...",
+            currenPhase : 2, 
             pwnduser : []
         }
     },
@@ -125,7 +134,7 @@ export default {
         setInterval(() => {
             this.axios.post(process.env.VUE_APP_BACKEND+"/result")
             .then(response => {
-                
+                this.id = response.data.assessment[0]
                 this.total = response.data.assessment[3]
                 this.progress = response.data.assessment[2]
                 this.speed = response.data.assessment[4]
@@ -180,7 +189,26 @@ export default {
             var start = new Date().getTime(), expire = start + ms;
             while (new Date().getTime() < expire) { 1 == 1}
             return;
-        }
+        },
+        downloadData (assessment_id) {
+                this.axios.post(process.env.VUE_APP_BACKEND+"/getAssessment",{
+                    assessment_id: assessment_id
+                })
+                .then(response => {
+                    let users = response.data.users
+                    
+                    let stringList = ""
+                    users.forEach(user => {
+                        stringList += user[1] + "\n"
+                    })
+                    
+                    let blob = new Blob([stringList], {type: "text/plain;charset=utf-8"});
+                    // add stringList into the file
+                    
+                    saveAs(blob, "result"+assessment_id+".txt");
+
+                })
+            }
 
     }
 

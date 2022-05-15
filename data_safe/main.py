@@ -293,8 +293,20 @@ def get_all_assessments():
     # end of get all assessments from database with the user count
     return {"assessments": newList}
      
-
-
+@app.route('/getAssessment', methods=['POST'])
+def getResulstOfAssessment():
+    data = request.get_json()
+    assessment_id = data['assessment_id']
+    # get all users from database
+    conn = sqlite3.connect('database.db')
+    c = conn.cursor()
+    c.execute("SELECT * FROM users WHERE assessment_id = ?", (assessment_id,))
+    users = c.fetchall()
+    conn.commit()
+    conn.close()
+    # end of get all users from database
+    return {"users": users}
+    
 
 # start flask server
 if __name__ == '__main__':

@@ -1,7 +1,9 @@
 <template>
 
     <div>
-
+        <div class="md:flex md:justify-center text-3xl pb-10 pt-10">
+            Add custom words to Horuswatch to adjust to your enviroment
+        </div>
         <div class="md:flex md:justify-center">
             <form @submit.prevent="onSubmit" class="w-1/2">
                 <div class="mb-6">
