@@ -1,7 +1,6 @@
-# Heliades
+# Horuswatch
 An Active Directory Passwort Assessment Solution <br>
-It tests all passwords against billions of variations of know bad passwords
-
+Test every password of your Forests against billions of bad ones
 
 ## Features
 - Easy to use UI
@@ -12,7 +11,8 @@ It tests all passwords against billions of variations of know bad passwords
 
 
 ## Preperation
-Insert the workstation local ip at 
+Insert the workstation network ip into the docker-compose file
+
 ```bash
 ...
 build: 
