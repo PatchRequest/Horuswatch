@@ -44,9 +44,6 @@ Please make sure to update tests as appropriate.
 - UI Improvments
 
 
-## License
-[Apache License 2.0](https://choosealicense.com/licenses/apache-2.0/)
-
 
 ## copyright and license notices 
 This product includes software developed by SecureAuth Corporation (https://www.secureauth.com/)  
