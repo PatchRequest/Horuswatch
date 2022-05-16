@@ -1,5 +1,5 @@
 <template>
-    <div class="md:flex md:justify-center text-3xl pb-10 pt-10">
+    <div class="flex justify-center text-3xl pb-10 pt-10">
             Latest Status
     </div>
     <div class="text-xl">
@@ -59,7 +59,7 @@
                 <progress class="progress progress-secondary h-16" :value="progress" :max="total"></progress>
             </div>
         </div>
-        <div class="flex justify-center w-full pt-10 text-xl"  v-if="status > 3">
+        <div class="flex justify-start w-full pt-10 text-xl"  v-if="status > 3">
             <button class="btn btn-primary" @click="downloadData(this.id)"> Download Results</button>
         </div>
 
@@ -104,9 +104,9 @@ export default {
             date : "loading...",
             total : "loading...",
             progress : "loading...",
-            status : 3,
+            status : 1,
             speed : "loading...",
-            currenPhase : 2, 
+            currenPhase : 1, 
             pwnduser : []
         }
     },

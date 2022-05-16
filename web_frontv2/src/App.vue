@@ -1,14 +1,15 @@
-<template>
+<template >
 
-
-  <NavBar @clicked="onClickChild" />
-  <StatusPage v-if="currentPage=='statuspage'"  />
-  <CreatePage @clicked="onClickChild"  v-if="currentPage=='createpage'" />
-  <HomePage v-if="currentPage=='homepage'" />
-  <StatisticPage v-if="currentPage=='statisticpage'" />
-  <AddPage  v-if="currentPage=='addpage'" />
-  <FooterBar class="absolute inset-x-0 bottom-0"/>
- 
+  <div class="dark">
+  
+    <NavBar @clicked="onClickChild" />
+    <StatusPage v-if="currentPage=='statuspage'"  />
+    <CreatePage @clicked="onClickChild"  v-if="currentPage=='createpage'" />
+    <HomePage v-if="currentPage=='homepage'" />
+    <StatisticPage v-if="currentPage=='statisticpage'" />
+    <AddPage  v-if="currentPage=='addpage'" />
+    <FooterBar class="absolute inset-x-0 bottom-0"/>
+  </div>
 </template>
 
 <script>

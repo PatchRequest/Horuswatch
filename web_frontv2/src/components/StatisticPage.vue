@@ -1,5 +1,5 @@
 <template>
-    <div class="md:flex md:justify-center text-3xl pb-10 pt-10">
+    <div class="flex justify-center text-3xl pb-10 pt-10">
             Statistic Overview
     </div>    
     <div class="text-xl">
