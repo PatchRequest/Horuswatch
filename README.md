@@ -39,13 +39,13 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 ## Container
-# Cracker
+### Cracker
 Hashcat + Flask for receiving cracking Task and reporting the results
-# Syncer
+### Syncer
 Impacket + Flask for DCSync with a Domain Controller
-# Datasafe
+### Datasafe
 Flask + SQLite for Storing Statistics + Results
-# Webfront
+### Webfront
 Vue Frontend
 
 
