@@ -1,5 +1,5 @@
 # Horuswatch
-An Active Directory Passwort Assessment Solution <br>
+An Active Directory Password Assessment Solution <br>
 Test every password of your Forests against billions of bad ones
 
 ## Features
